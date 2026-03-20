@@ -2,7 +2,7 @@
 
 / {
 	compatible = "hisilicon,hi1910B-evb", "hisilicon,ascend610";
-	hisi,boardid = <0x0 0x0 0x0 0x0>;
+	hisi,boardid = <0x2 0x8 0x2 0x3>;
 	#address-cells = <0x2>;
 	#size-cells = <0x2>;
 	interrupt-parent = <0x1>;
