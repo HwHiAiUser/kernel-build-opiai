@@ -2,26 +2,26 @@
 
 / {
 	compatible = "hisilicon,hi1910B-evb", "hisilicon,ascend610";
-	hisi,boardid = <0x80 0x0 0x28 0x23>;
+	hisi,boardid = <0x80 0x0 0x28 0x0B>;
 	#address-cells = <0x2>;
 	#size-cells = <0x2>;
 	interrupt-parent = <0x1>;
-	model = "Orange Pi Ai Pro 20T";
+	model = "Orange Pi Ai Pro";
 
 	/include/ "base/hi1910B-asic-kernel-rc.dtsi"
 	/include/ "base/hi1910B-commmon-smmu.dtsi"
 	/include/ "base/hi1910B-mpam.dtsi"
-	/include/ "base/hi1910B-lp-pm.dtsi"
+	// /include/ "base/hi1910B-lp-pm.dtsi"
 	/include/ "base/hi1910B-lp-devmng.dtsi"
 	/include/ "base/hi1910B-mbigen-ao.dtsi"
-	/include/ "base/hi1910B-gpio-20t.dtsi"
+	/include/ "base/hi1910B-gpio-8t.dtsi"
 	// /include/ "base/hi1910B-bindcore.dtsi"
 	// /include/ "base/hi1910B-can.dtsi"
 	/include/ "base/hi1910B-emmc.dtsi"
 	/include/ "base/hi1910B-ipcdrv.dtsi"
 	/include/ "base/hi1910B-ts-drv.dtsi"
 	/include/ "base/hi1910B-tsdrv.dtsi"
-	// /include/ "base/hi1910B-network-M100-B51.dtsi"
+	/include/ "base/hi1910B-network-M100-B51.dtsi"
 	/include/ "base/hi1910B-hidvpp.dtsi"
 	/include/ "base/hi1910B-hdmi.dtsi"
 	/include/ "product/hi1910B-audio.dtsi"
@@ -33,14 +33,13 @@
 	/include/ "base/hi1910B-mntn-milanr3.dtsi"
 	/include/ "base/hi1910B-gpu.dtsi"
 	/include/ "base/hi1910B-ctl.dtsi"
-	/include/ "base/hi1910B-itrustee.dtsi"
-	// /include/ "base/hi1910B-sata.dtsi"
-	// /include/ "product/hi1910B-pcie-sata-rc-M100-B51.dtsi"
-	/include/ "product/hi1910B-pcie-rc-M100-B51-20t.dtsi"
-	/include/ "product/hi1910B-pinctrl-M100-B51-20t.dtsi"
-	/include/ "product/hi1910B-hiusbc-B51-20t.dtsi"
-	/include/ "product/hi1910B-i2c-M100-B51.dtsi"
-	/include/ "product/hi1910B-spi-M100-B51.dtsi"
+    /include/ "base/hi1910B-itrustee.dtsi"
+    // /include/ "base/hi1910B-sata.dtsi"
+    /include/ "product/hi1910B-pcie-rc-M100-B51-8t.dtsi"
+    /include/ "product/hi1910B-pinctrl-M100-B51-8t.dtsi"
+	/include/ "product/hi1910B-hiusbc-B51-8t.dtsi"
+    /include/ "product/hi1910B-i2c-M100-B51.dtsi"
+    /include/ "product/hi1910B-spi-M100-B51.dtsi"
 	/include/ "base/hi1910B-abl-qos.dtsi"
 
 	poweroff {
@@ -54,6 +53,12 @@
 	chosen {
 		bootargs = "console=ttyAMA0,115200 console=tty1 log_redirect=0x1fc000@0x22741000 root=/dev/mmcblk1p1 rw rdinit=/sbin/init rodata=off syslog earlycon=pl011,mmio32,0xC4010000 initrd=0x2BA00000,300M rootwait mpam=of enable_ascend_share_pool ascend_enable_all enable_sp_multi_group_mode init_all_gicr enable_fpga no_console_suspend use_kallsyms_lookup_symbol selinux=0 systemd.unified_cgroup_hierarchy=0 fbcon=map:6 movable_node cma=256M rootfstype=ext4 ";
 	};
+};
+
+&eth0 {
+	pinctrl-names = "default", "idle";
+	pinctrl-0 = <&mdc0_cfg_func &mdio0_cfg_func>;
+	pinctrl-1 = <&mdc0_cfg_func &mdio0_cfg_func>;
 };
 
 &i2c5_ao {
@@ -81,23 +86,6 @@
 	TMDS_DRV_CFG_CH_1_4 = <0x40021B02 0x00021B02 0x00021B02 0x40021B02 0x00021B02 0x00021B02>;
 };
 
-&i2c13_dsi {
-	gt9xx_0: touchscreen@14 {
-		compatible = "goodix,gt9271";
-		reg = <0x14>;
-		interrupt-parent = <&gpio3>;
-		interrupts = <0x02 0x08>;
-		irq-gpios = <&gpio3 0x02 0x08>;
-		reset-gpios = <&gpio3 0x03 0x0>;
-		touchscreen-inverted-x;
-		//touchscreen-inverted-y;
-		touchscreen-swapped-x-y;
-		touchscreen-size-x = <1280>;
-		touchscreen-size-y = <800>;
-		status = "okay";
-	};
-};
-
 &i2c7_peri {
 	pinctrl-names = "default", "idle";
 	pinctrl-0 = <&scl7_cfg_func &sda7_cfg_func>;
@@ -109,14 +97,9 @@
 	pinctrl-0 = <&scl8_cfg_func &sda8_cfg_func>;
 	pinctrl-1 = <&scl8_cfg_func &sda8_cfg_func>;
 
-	eeprom_board: eeprom@50 {
+	eeprom_board:eeprom@50 {
 		compatible = "eeprom,eeprom_m24256";
 		reg = <0x50>;
-	};
-
-	rtc: rtc_rx8900@32 {
-		compatible = "epson,rx8900";
-		reg = <0x32>;
 	};
 };
 
@@ -181,16 +164,5 @@
 		gpios = <0x13 0x0>;
 		output-high;
 		line-name = "led_light";
-	};
-};
-
-&i2c3_isp {
-	usbc0: fusb302@22 {
-		compatible = "fcs,fusb302";
-		reg = <0x22>;
-		fcs,int_n = <&gpio5 8 0>;
-		vbus-gpios = <&gpio4 1 0>;
-		typec-gpios = <&gpio7 10 0>;
-		status = "okay";
 	};
 };

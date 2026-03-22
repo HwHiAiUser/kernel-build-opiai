@@ -12,7 +12,7 @@ if(PRODUCT STREQUAL "ascend310Besl" OR
    PRODUCT STREQUAL "ascend310Brcemu")
     # 当前driver跟esl用相同的dts，后期需要更新到单独的目录
     set(DTS_SRC_DIR ${DTS_BASE_DIR}/hi1910b/hi1910BL)
-    set(DTS_FILE_LIST hi1910B-orangepiaipro20t.dts)
+    set(DTS_FILE_LIST hi1910B-orangepiaipro20t.dts hi1910B-orangepiaipro8t.dts)
     set(OUT_DT_IMAGE dt.img)
 else()
     message(FATAL_ERROR "unsupported chip '${PRODUCT}' for Ascend310B dtb target")
