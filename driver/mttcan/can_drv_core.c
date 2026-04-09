@@ -1423,10 +1423,25 @@ STATIC int mttcan_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd)
     return ret;
 }
 
+static int mttcan_change_mtu(struct net_device *dev, int new_mtu)
+{
+    struct can_priv *priv = netdev_priv(dev);
+
+    if (dev->flags & IFF_UP)
+        return -EBUSY;
+
+    if (new_mtu != CAN_MTU && new_mtu != CANFD_MTU &&
+        !(priv->ctrlmode_supported & CAN_CTRLMODE_XL && can_is_canxl_dev_mtu(new_mtu)))
+        return -EINVAL;
+
+    WRITE_ONCE(dev->mtu, new_mtu);
+    return 0;
+}
+
 static const struct net_device_ops can_drv_netdev_ops = {
     .ndo_open = mttcan_open,
     .ndo_stop = mttcan_close,
-    .ndo_change_mtu = can_change_mtu,
+    .ndo_change_mtu = mttcan_change_mtu,
     .ndo_start_xmit = mttcan_start_xmit,
     .ndo_do_ioctl = mttcan_ioctl,
 };

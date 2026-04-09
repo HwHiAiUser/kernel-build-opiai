@@ -166,6 +166,9 @@ static u32 g_low_bandwidth_cnt;
 static u32 g_bus_err_cnt;
 static DEFINE_SPINLOCK(g_drm_lock);
 
+static int drm_set_gfx_galpha(u32 layer_id, u32 alpha_en, u8 global_alpha);
+static int drm_hal_set_layer_galpha(u32 layer_id, u8 alpha);
+
 #define ASCEND_VDP_INT_MASK_DHD0 0x06
 #define ASCEND_VDP_INT_MASK_DHD1 0x60
 #define ASCEND_VDP_INT_MASK_DSD0 0x600
@@ -1558,7 +1561,7 @@ static int drm_hal_set_src_resolution(u32 layer_id, u64 pos, u64 size)
 
 	(void)pos;
 	(void)layer_id;
-	if (fb_hal_layer_set_src_resolution(ASCEND_VDP_HW_LAYER, rect) == TD_FALSE)
+	if (fb_hal_layer_set_src_resolution(ASCEND_VDP_HW_LAYER, &rect) == TD_FALSE)
 		return -EINVAL;
 	return 0;
 }
@@ -1574,7 +1577,7 @@ static int drm_hal_set_layer_in_rect(u32 layer_id, u64 pos, u64 size)
 
 	(void)pos;
 	(void)layer_id;
-	return fb_hal_layer_set_layer_in_rect(ASCEND_VDP_HW_LAYER, rect) == TD_FALSE ? -EINVAL : 0;
+	return fb_hal_layer_set_layer_in_rect(ASCEND_VDP_HW_LAYER, &rect) == TD_FALSE ? -EINVAL : 0;
 }
 
 static int drm_set_gfx_src_reso(u32 layer_id, u64 pos, u64 size)

@@ -24,6 +24,7 @@
 #include <linux/semaphore.h>
 #include <linux/kthread.h>
 #include <linux/delay.h>
+#include <linux/interrupt.h>
 #include <linux/securec.h>
 
 #include "bootparam/bbox_boot_param.h"
@@ -167,7 +168,7 @@ s32 bbox_exception_report(const struct bbox_report_info *info)
                   "status: atomic[%u], irqs disabled[%u], irq[%lu].\n",
                   info->devid, rdr_get_model_name(info->excepid),
                   info->time.tv_sec, info->time.tv_usec, info->excepid,
-                  in_atomic(), irqs_disabled(), in_irq());
+                  in_atomic(), irqs_disabled(), in_hardirq());
 
     if (g_init_done == false) {
         BB_PRINT_ERR("bbox rdr hasn't been inited!\n");
@@ -571,4 +572,3 @@ void bbox_rdr_exit(void)
     rdr_deinitialize();
     g_init_done = false;
 }
-
