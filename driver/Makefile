@@ -107,7 +107,7 @@ DEVICE_L0 := bbox bootdot qos hsm_flash hsm_firmware_update dbl_board_config dbl
 DEVICE_L1 := trs_chan trs_stars dvpp_osal base sys dfm
 
 DEVICE_L2 := hns3 ts_platform upgrade user_cfg hiusbc ts_channel \
-	audio vdp hdmi mipi_rx
+	audio hdmi mipi_rx
 
 DEVICE_L3 := dms virtmng trs_core
 
