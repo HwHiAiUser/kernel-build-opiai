@@ -56,6 +56,17 @@
 	};
 };
 
+/* 24 GiB: 2 GiB low RAM, 512 MiB TS RAM, 21.5 GiB high RAM.
+ * Keep the TS bank and reserved-memory regions from the shared base tree.
+ */
+&{/memory0@numa0} {
+	reg = <0x0 0x0 0x0 0x80000000>;
+};
+
+&{/memory1@numa0} {
+	reg = <0x20 0xa0000000 0x5 0x60000000>;
+};
+
 &i2c5_ao {
 	bq25713: bq25713@6b {
 		status = "okay";
