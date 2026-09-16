@@ -55,6 +55,17 @@
 	};
 };
 
+/* 16 GiB: 2 GiB low RAM, 512 MiB TS RAM, 13.5 GiB high RAM.
+ * Keep the TS bank and reserved-memory regions from the shared base tree.
+ */
+&{/memory0@numa0} {
+	reg = <0x0 0x0 0x0 0x80000000>;
+};
+
+&{/memory1@numa0} {
+	reg = <0x20 0xa0000000 0x3 0x60000000>;
+};
+
 &eth0 {
 	pinctrl-names = "default", "idle";
 	pinctrl-0 = <&mdc0_cfg_func &mdio0_cfg_func>;
